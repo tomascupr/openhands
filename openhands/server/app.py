@@ -14,6 +14,7 @@ from openhands.server.routes.conversation import app as conversation_api_router
 from openhands.server.routes.feedback import app as feedback_api_router
 from openhands.server.routes.files import app as files_api_router
 from openhands.server.routes.git import app as git_api_router
+from openhands.server.routes.image_analysis import router as image_analysis_router
 from openhands.server.routes.manage_conversations import (
     app as manage_conversation_api_router,
 )
@@ -52,3 +53,4 @@ app.include_router(manage_conversation_api_router)
 app.include_router(settings_router)
 app.include_router(git_api_router)
 app.include_router(trajectory_router)
+app.include_router(image_analysis_router, prefix="/api/images")

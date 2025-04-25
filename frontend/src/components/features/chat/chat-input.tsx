@@ -5,6 +5,7 @@ import { I18nKey } from "#/i18n/declaration";
 import { cn } from "#/utils/utils";
 import { SubmitButton } from "#/components/shared/buttons/submit-button";
 import { StopButton } from "#/components/shared/buttons/stop-button";
+import { ImageAnalysisButton } from "./image-analysis-button";
 
 interface ChatInputProps {
   name?: string;
@@ -140,16 +141,22 @@ export function ChatInput({
           className,
         )}
       />
-      {showButton && (
-        <div className={buttonClassName}>
-          {button === "submit" && (
-            <SubmitButton isDisabled={disabled} onClick={handleSubmitMessage} />
-          )}
-          {button === "stop" && (
-            <StopButton isDisabled={disabled} onClick={onStop} />
-          )}
-        </div>
-      )}
+      <div className="flex items-center">
+        <ImageAnalysisButton 
+          onAnalysisComplete={(result) => onSubmit(result)} 
+          disabled={disabled} 
+        />
+        {showButton && (
+          <div className={buttonClassName}>
+            {button === "submit" && (
+              <SubmitButton isDisabled={disabled} onClick={handleSubmitMessage} />
+            )}
+            {button === "stop" && (
+              <StopButton isDisabled={disabled} onClick={onStop} />
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

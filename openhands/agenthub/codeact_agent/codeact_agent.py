@@ -8,6 +8,7 @@ import openhands.agenthub.codeact_agent.function_calling as codeact_function_cal
 from openhands.agenthub.codeact_agent.tools.bash import create_cmd_run_tool
 from openhands.agenthub.codeact_agent.tools.browser import BrowserTool
 from openhands.agenthub.codeact_agent.tools.finish import FinishTool
+from openhands.agenthub.codeact_agent.tools.image_analysis import create_image_analysis_tool
 from openhands.agenthub.codeact_agent.tools.ipython import IPythonTool
 from openhands.agenthub.codeact_agent.tools.llm_based_edit import LLMBasedFileEditTool
 from openhands.agenthub.codeact_agent.tools.str_replace_editor import (
@@ -118,6 +119,8 @@ class CodeActAgent(Agent):
             tools.append(BrowserTool)
         if self.config.enable_jupyter:
             tools.append(IPythonTool)
+        if self.config.enable_image_analysis:
+            tools.append(create_image_analysis_tool(self.llm))
         if self.config.enable_llm_editor:
             tools.append(LLMBasedFileEditTool)
         elif self.config.enable_editor:
