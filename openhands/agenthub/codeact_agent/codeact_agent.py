@@ -7,6 +7,7 @@ from litellm import ChatCompletionToolParam
 import openhands.agenthub.codeact_agent.function_calling as codeact_function_calling
 from openhands.agenthub.codeact_agent.tools.bash import create_cmd_run_tool
 from openhands.agenthub.codeact_agent.tools.browser import BrowserTool
+from openhands.agenthub.codeact_agent.tools.code_rag import create_code_rag_tool
 from openhands.agenthub.codeact_agent.tools.finish import FinishTool
 from openhands.agenthub.codeact_agent.tools.ipython import IPythonTool
 from openhands.agenthub.codeact_agent.tools.llm_based_edit import LLMBasedFileEditTool
@@ -116,6 +117,16 @@ class CodeActAgent(Agent):
         if self.config.enable_browsing:
             tools.append(WebReadTool)
             tools.append(BrowserTool)
+            # If both browsing and code_rag are enabled, add the code_rag tool
+            # (it depends on WebReadTool)
+            if self.config.enable_code_rag:
+                # We need to create a wrapper function for the web_read tool
+                # that can be passed to the code_rag tool
+                async def web_read_wrapper(url):
+                    # This assumes WebReadTool is a dictionary with a 'function' key
+                    return await WebReadTool['function'](url=url)
+                
+                tools.append(create_code_rag_tool(web_read_wrapper))
         if self.config.enable_jupyter:
             tools.append(IPythonTool)
         if self.config.enable_llm_editor:
